@@ -109,3 +109,18 @@ class BooksTest(TestCase):
         self.check_filtering_title()
         self.check_filtering_isbn()
         self.check_book_delete()
+
+    def clear_throttling_rates(self):
+        from django.core.cache import cache
+        cache.clear()
+
+    def test_throttling(self):
+        self.clear_throttling_rates()
+        # Assumes the default limit of 100 requests per day.
+        for iteration in range(100):
+            response = self.client.get('/books')
+            self.assertEquals(response.status_code, 200)
+
+        # The 101th request should be throttled.
+        response = self.client.get('/books')
+        self.assertEquals(response.status_code, 429)

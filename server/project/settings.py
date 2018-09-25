@@ -9,7 +9,7 @@ ENVIRONMENT = config('ENV', default='dev')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 's-w$1^v@#xy#z(wde-=u8&xx9%yg!lwn-&a!h%v2i-ru&%2r!x'
+SECRET_KEY = config('SECRET_KEY', default='s-w$1^v@#xy#z(wde-=u8&xx9%yg!lwn-&a!h%v2i-ru&%2r!x')
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
@@ -99,5 +99,8 @@ STATIC_URL = config('STATIC_URL', default='/static/')
 REST_FRAMEWORK = {
     'DEFAULT_MODEL_SERIALIZER_CLASS': 'rest_framework.serializers.ModelSerializer',
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-    'NON_FIELD_ERRORS_KEY': 'other_errors'
+    'NON_FIELD_ERRORS_KEY': 'other_errors',
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': config('GLOBAL_THROTTLE_RATE', default='100/day')
+    }
 }
