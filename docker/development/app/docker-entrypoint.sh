@@ -1,5 +1,5 @@
 #!/bin/sh
-# Docker entrypoint to run django for developement. This one uses Django's developement server.
+# Docker entrypoint to run django for development. This one uses Django's development server.
 
 if [ "x$MOUNT_POINT" = "x" ]; then
     echo "No mountpoint defined."

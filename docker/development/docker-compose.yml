@@ -4,7 +4,7 @@ services:
   db:
     build:
       context: ../../
-      dockerfile: docker/developement/db/Dockerfile
+      dockerfile: docker/development/db/Dockerfile
     image: djangodbdev
     volumes:
       - data-volume-dev:/var/lib/postgresql/data
@@ -14,7 +14,7 @@ services:
   app:
     build:
       context: ../../
-      dockerfile: docker/developement/app/Dockerfile
+      dockerfile: docker/development/app/Dockerfile
     image: djangoappdev
     ports:
       - "8080:8000"

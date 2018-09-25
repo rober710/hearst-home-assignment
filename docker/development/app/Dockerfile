@@ -1,10 +1,10 @@
 FROM python:3.6.6-stretch
 
-# In developement, the repository is mounted inside the container.
+# In development, the repository is mounted inside the container.
 ENV MOUNT_POINT=/srv/django-server
 
-COPY docker/developement/app/docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
-COPY docker/developement/app/check_user.sh /usr/bin/check_user.sh
+COPY docker/development/app/docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
+COPY docker/development/app/check_user.sh /usr/bin/check_user.sh
 
 RUN useradd -m -c 'Django application' --shell /bin/bash django \
     && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
