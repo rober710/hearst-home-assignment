@@ -60,6 +60,27 @@ class BooksTest(TestCase):
         self.assertIsInstance(response.data, dict)
         self.assertEquals(response.data.get('id', None), book_id)
 
+    def check_filtering_title(self):
+        response = self.client.get('/books', {'title': 'silmarill'})
+        self.assertEquals(response.status_code, 200)
+        self.assertIsInstance(response.data, list)
+        self.assertEquals(len(response.data) > 0, True)
+
+        # Get the first item and check it has the searched item
+        book = response.data[0]
+        self.assertEquals('silmarill' in book['title'].lower(), True)
+
+    def check_filtering_isbn(self):
+        response = self.client.get('/books', {'isbn': '9780061927645'})
+        self.assertEquals(response.status_code, 200)
+        self.assertIsInstance(response.data, list)
+        # ISBN is unique, one result should be found.
+        self.assertEquals(len(response.data), 1)
+
+        # Check it is indeed "The Silmarillion"
+        book = response.data[0]
+        self.assertEquals(book['isbn'], '9780061927645')
+
     def test_book_endpoints(self):
         """
         This test method ensures tests are run in the proper order.
@@ -68,3 +89,5 @@ class BooksTest(TestCase):
         self.check_validations()
         self.check_book_list_retrieval()
         self.check_book_detail()
+        self.check_filtering_title()
+        self.check_filtering_isbn()
