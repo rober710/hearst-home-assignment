@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'books',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -91,3 +93,11 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = config('STATIC_URL', default='/static/')
+
+# REST framework configuration
+
+REST_FRAMEWORK = {
+    'DEFAULT_MODEL_SERIALIZER_CLASS': 'rest_framework.serializers.ModelSerializer',
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+    'NON_FIELD_ERRORS_KEY': 'other_errors'
+}
