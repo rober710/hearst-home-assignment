@@ -52,13 +52,22 @@ class BooksTest(TestCase):
         self.assertIsInstance(response.data, list)
         self.assertEquals(len(response.data), 1)
 
+        book = response.data[0]
+        self.assertIsInstance(book['id'], int)
+        self.assertIsInstance(book.get('title', None), str)
+        self.assertIsInstance(book.get('author', None), str)
+        self.assertEquals('price' in book, True)
+        self.assertIsInstance(book.get('short_description', None), str)
+
+        # Save the ID of the retrieved book for subsequent tests.
+        self.sample_book_id = book['id']
+
     def check_book_detail(self):
         # Return a single book information
-        book_id = 1
-        response = self.client.get('/books/{0}'.format(book_id))
+        response = self.client.get('/books/{0}'.format(self.sample_book_id))
         self.assertEquals(response.status_code, 200)
         self.assertIsInstance(response.data, dict)
-        self.assertEquals(response.data.get('id', None), book_id)
+        self.assertEquals(response.data.get('id', None), self.sample_book_id)
 
     def check_filtering_title(self):
         response = self.client.get('/books', {'title': 'silmarill'})
@@ -81,6 +90,14 @@ class BooksTest(TestCase):
         book = response.data[0]
         self.assertEquals(book['isbn'], '9780061927645')
 
+    def check_book_delete(self):
+        response = self.client.delete('/books/{0}'.format(self.sample_book_id))
+        self.assertEquals(response.status_code, 204)
+
+        # Check the book with the sample ID has been deleted
+        response = self.client.get('/books/{0}'.format(self.sample_book_id))
+        self.assertEquals(response.status_code, 404)
+
     def test_book_endpoints(self):
         """
         This test method ensures tests are run in the proper order.
@@ -91,3 +108,4 @@ class BooksTest(TestCase):
         self.check_book_detail()
         self.check_filtering_title()
         self.check_filtering_isbn()
+        self.check_book_delete()
