@@ -5,4 +5,4 @@ FROM postgres:10.5-alpine
 ENV POSTGRES_INITDB_ARGS="--encoding=UTF8 --locale=C"
 ENV POSTGRES_PASSWORD="postgres"
 
-COPY  docker/develoement/db/setup_db.sql /docker-entrypoint-initdb.d/
+COPY  docker/development/db/setup_db.sql /docker-entrypoint-initdb.d/
