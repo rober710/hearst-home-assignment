@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  db:
+    build:
+      context: ../../
+      dockerfile: docker/developement/db/Dockerfile
+    image: djangodbdev
+    volumes:
+      - data-volume-dev:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  app:
+    build:
+      context: ../../
+      dockerfile: docker/developement/app/Dockerfile
+    image: djangoappdev
+    ports:
+      - "8080:8000"
+    environment:
+      - MOUNT_POINT=/srv/django-server
+      - DATABASE_URL=postgres://hearst:hearst@db:5432/hearstdb
+    volumes:
+      - ../../:/srv/django-server
+    depends_on:
+      - db
+
+volumes:
+  data-volume-dev:
