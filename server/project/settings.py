@@ -94,6 +94,8 @@ USE_TZ = True
 
 STATIC_URL = config('STATIC_URL', default='/static/')
 
+STATIC_ROOT = config('STATIC_ROOT', default=os.path.join(BASE_DIR, 'staticfiles'))
+
 # REST framework configuration
 
 REST_FRAMEWORK = {

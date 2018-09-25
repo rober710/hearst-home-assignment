@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+  db:
+    build:
+      context: ../../
+      dockerfile: docker/production/db/Dockerfile
+    image: djangodbprod
+    volumes:
+      - db-data-volume-prod:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  app:
+    build:
+      context: ../../
+      dockerfile: docker/production/app/Dockerfile
+    image: djangoappprod
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://hearst:hearst@db:5432/hearstdb
+      - ENV=prod
+      - DEBUG=False
+      - STATIC_ROOT=/srv/django-server/server/staticfiles
+    volumes:
+      - staticfiles:/srv/django-server/server/staticfiles
+    depends_on:
+      - db
+
+  nginx:
+    build:
+      context: ../
+      dockerfile: production/nginx/Dockerfile
+    image: djangoproxy
+    ports:
+    - "8080:80"
+    volumes:
+    - staticfiles:/srv/www/static
+    depends_on:
+    - app
+
+volumes:
+  db-data-volume-prod:
+  staticfiles:
